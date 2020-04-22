@@ -45,10 +45,9 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	@Transactional
 	public Reservation bookFlight(ReservationRequest request) {
-		System.out.println("request --- " + request);
 		Long flightId = request.getFlightId();
 	
-		Flight flight = flightRepository.findById(flightId).get();
+		Flight flight = flightRepository.findById(flightId).orElse(null);
 
 		Passenger passenger = new Passenger();
 		passenger.setFirstName(request.getPassengerFirstName());

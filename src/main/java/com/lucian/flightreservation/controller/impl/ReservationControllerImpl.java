@@ -3,6 +3,7 @@ package com.lucian.flightreservation.controller.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lucian.flightreservation.dto.ReservationDto;
 import com.lucian.flightreservation.dto.ReservationRequest;
+import com.lucian.flightreservation.entities.Reservation;
 import com.lucian.flightreservation.repository.FlightRepository;
 import com.lucian.flightreservation.service.ReservationService;
 
@@ -35,14 +37,26 @@ public class ReservationControllerImpl {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<ReservationDto> getReservation(@PathVariable long id) {
-		return ResponseEntity.ok(reservationService.getReservation(id).toDto());
+		Reservation reservation = reservationService.getReservation(id);
+
+		if (reservation == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+
+		return new ResponseEntity<ReservationDto>(reservation.toDto(), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ReservationDto> deleteReservation(@PathVariable long id) {
-		reservationService.deleteReservation(id);
+		Reservation reservation = reservationService.getReservation(id);
 
-		return ResponseEntity.ok().build();
+		if (reservation == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+
+		reservationService.deleteReservation(id);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+
 	}
 
 	@PostMapping

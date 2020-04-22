@@ -3,6 +3,7 @@ package com.lucian.flightreservation.controller.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,24 +52,47 @@ public class FlightControllerImpl {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<FlightDto> getFlight(@PathVariable long id) {
-		return ResponseEntity.ok(flightService.getFlight(id).toDto());
+		Flight flight = flightService.getFlight(id);
+
+		if (flight == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+
+		return new ResponseEntity<FlightDto>(flight.toDto(), HttpStatus.OK);
 	}
 
 	@PutMapping
 	public ResponseEntity<FlightDto> updateFlight(@RequestBody Flight flight) {
-		return ResponseEntity.ok(flightService.updateFlight(flight).toDto());
+
+		if (flight == null) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		}
+
+		flightService.updateFlight(flight);
+		return new ResponseEntity<FlightDto>(flight.toDto(), HttpStatus.ACCEPTED);
 	}
 
 	@PostMapping
 	public ResponseEntity<FlightDto> addFlight(@RequestBody Flight flight) {
-		return ResponseEntity.ok(flightService.addFlight(flight).toDto());
+
+		if (flight == null) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		}
+
+		flightService.addFlight(flight);
+		return new ResponseEntity<FlightDto>(flight.toDto(), HttpStatus.CREATED);
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<FlightDto> deleteFlight(@PathVariable long id) {
-		flightService.deleteFlight(id);
+		Flight flight = flightService.getFlight(id);
 
-		return ResponseEntity.ok().build();
+		if (flight == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+
+		flightService.deleteFlight(id);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 	}
 
 }

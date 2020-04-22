@@ -3,6 +3,7 @@ package com.lucian.flightreservation.controller.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,24 +33,48 @@ public class PassengerContollerImpl {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<PassengerDto> getPassenger(@PathVariable long id) {
-		return ResponseEntity.ok(passengerService.getPassenger(id).toDto());
+		Passenger passenger = passengerService.getPassenger(id);
+
+		if (passenger == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+
+		return new ResponseEntity<PassengerDto>(passenger.toDto(), HttpStatus.OK);
 	}
 
 	@PutMapping
 	public ResponseEntity<PassengerDto> updatePassenger(@RequestBody Passenger passenger) {
-		return ResponseEntity.ok(passengerService.updatePassenger(passenger).toDto());
+
+		if (passenger == null) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		}
+
+		passengerService.updatePassenger(passenger);
+		return new ResponseEntity<PassengerDto>(passenger.toDto(), HttpStatus.ACCEPTED);
 	}
 
 	@PostMapping
 	public ResponseEntity<PassengerDto> addPassenger(@RequestBody Passenger passenger) {
-		return ResponseEntity.ok(passengerService.addPassenger(passenger).toDto());
+
+		if (passenger == null) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		}
+
+		passengerService.addPassenger(passenger);
+		return new ResponseEntity<PassengerDto>(passenger.toDto(), HttpStatus.ACCEPTED);
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<PassengerDto> deletePassenger(@PathVariable long id) {
-		passengerService.deletePassenger(id);
+		Passenger passenger = passengerService.getPassenger(id);
 
-		return ResponseEntity.ok().build();
+		if (passenger == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+
+		passengerService.deletePassenger(id);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+
 	}
 
 }
