@@ -1,16 +1,29 @@
 package com.lucian.flightreservation.entities;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import com.lucian.flightreservation.dto.PassengerDto;
 
 @Entity
 public class Passenger extends AbstractEntity {
 
+	@NotNull(message = "First Name is required")
 	private String firstName;
+
+	@NotNull(message = "Last Name is required")
 	private String lastName;
+	
 	private String middleName;
+
+	@NotNull(message = "Email is required")
+	@Pattern(regexp=".+@.+\\..+", message="Please provide a valid email address")
+	@Email
 	private String email;
+
+	@NotNull(message = "Phone is required")
 	private String phone;
 
 	public String getFirstName() {
@@ -57,12 +70,11 @@ public class Passenger extends AbstractEntity {
 	public String toString() {
 		return "Passenger [firstName=" + firstName + ", lastName=" + lastName + ", middleName=" + middleName
 				+ ", email=" + email + ", phone=" + phone + "]";
-	}	
-
-	public PassengerDto toDto() {
-		return new PassengerDto(this.getId(),this.getFirstName(),this.getLastName(),this.getMiddleName(),this.getEmail(),this.getPhone());
 	}
 
-	
+	public PassengerDto toDto() {
+		return new PassengerDto(this.getId(), this.getFirstName(), this.getLastName(), this.getMiddleName(),
+				this.getEmail(), this.getPhone());
+	}
 
 }

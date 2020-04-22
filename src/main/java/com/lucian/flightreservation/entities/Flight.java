@@ -4,17 +4,29 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 
 import com.lucian.flightreservation.dto.FlightDto;
 
 @Entity
 public class Flight extends AbstractEntity {
 
+	@NotNull(message = "Flight Number is required")
 	private String flightNumber;
+	
+	@NotNull(message = "Operating Airlines is required")
 	private String operatingAirlines;
+	
+	@NotNull(message = "Departure City is required")
 	private String departureCity;
+	
+	@NotNull(message = "Arrival City is required")
 	private String arrivalCity;
+	
+	@NotNull(message = "Date of Departure is required")
 	private Date dateOfDeparture;
+	
+	@NotNull(message = "Estimated Departure Time is required")
 	private Timestamp estimatedDepartureTime;
 
 	public String getFlightNumber() {

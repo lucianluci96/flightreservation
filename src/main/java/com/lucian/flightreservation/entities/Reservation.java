@@ -2,6 +2,7 @@ package com.lucian.flightreservation.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.Min;
 
 import com.lucian.flightreservation.dto.ReservationDto;
 
@@ -9,6 +10,8 @@ import com.lucian.flightreservation.dto.ReservationDto;
 public class Reservation extends AbstractEntity {
 
 	private Boolean checkedIn;
+	
+	@Min(value=1,message = "Number of bags must be at least 1")
 	private int numberOfBags;
 
 	@OneToOne
