@@ -25,19 +25,25 @@ import com.lucian.flightreservation.dto.PassengerDto;
 import com.lucian.flightreservation.entities.Passenger;
 import com.lucian.flightreservation.service.PassengerService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/passengers")
+@Api(value = "Passenger Management System", description = "Passenger Management System")
 public class PassengerContollerImpl {
 
 	@Autowired
 	private PassengerService passengerService;
 
+	@ApiOperation(value = "View a list of available passengers")
 	@GetMapping
 	public ResponseEntity<List<PassengerDto>> getPassengers() {
 		return ResponseEntity.ok(passengerService.getPassengers());
 
 	}
 
+	@ApiOperation(value = "Get passenger by ID")
 	@GetMapping("/{id}")
 	public ResponseEntity<PassengerDto> getPassenger(@PathVariable long id) {
 		Passenger passenger = passengerService.getPassenger(id);
@@ -49,18 +55,21 @@ public class PassengerContollerImpl {
 		return new ResponseEntity<PassengerDto>(passenger.toDto(), HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "Update Passenger")
 	@PutMapping
 	public ResponseEntity<PassengerDto> updatePassenger(@RequestBody @Valid Passenger passenger) {
 		passengerService.updatePassenger(passenger);
 		return new ResponseEntity<PassengerDto>(passenger.toDto(), HttpStatus.ACCEPTED);
 	}
 
+	@ApiOperation(value = "Create Passenger")
 	@PostMapping
 	public ResponseEntity<PassengerDto> addPassenger(@RequestBody @Valid Passenger passenger) {
 		passengerService.addPassenger(passenger);
 		return new ResponseEntity<PassengerDto>(passenger.toDto(), HttpStatus.ACCEPTED);
 	}
 
+	@ApiOperation(value = "Delete Passenger")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<PassengerDto> deletePassenger(@PathVariable long id) {
 		Passenger passenger = passengerService.getPassenger(id);

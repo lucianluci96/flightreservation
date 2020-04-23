@@ -28,8 +28,12 @@ import com.lucian.flightreservation.repository.UserRepository;
 import com.lucian.flightreservation.service.SecurityService;
 import com.lucian.flightreservation.service.UserService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/users")
+@Api(value = "User Management System", description = "User Management System")
 public class UserControllerImpl {
 
 	@Autowired
@@ -44,12 +48,14 @@ public class UserControllerImpl {
 	@Autowired
 	private BCryptPasswordEncoder encoder;
 
+	@ApiOperation(value = "View a list of available users")
 	@GetMapping
 	public ResponseEntity<List<UserDto>> getUsers() {
 		return ResponseEntity.ok(userService.getUsers());
 
 	}
 
+	@ApiOperation(value = "Get user by ID")
 	@GetMapping("/{id}")
 	public ResponseEntity<UserDto> getUser(@PathVariable long id) {
 		User user = userService.getUser(id);
@@ -61,6 +67,7 @@ public class UserControllerImpl {
 		return new ResponseEntity<UserDto>(user.toDto(), HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "Update user")
 	@PutMapping
 	public ResponseEntity<UserDto> updateFlight(@RequestBody @Valid User user) {
 		user.setPassword(encoder.encode(user.getPassword()));
@@ -75,6 +82,7 @@ public class UserControllerImpl {
 		return new ResponseEntity<UserDto>(user.toDto(), HttpStatus.ACCEPTED);
 	}
 
+	@ApiOperation(value = "Delete user")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<UserDto> deleteUser(@PathVariable long id) {
 		User user = userService.getUser(id);
@@ -89,12 +97,14 @@ public class UserControllerImpl {
 
 	}
 
+	@ApiOperation(value = "Register User")
 	@PostMapping("/registerUser")
 	public ResponseEntity<UserDto> register(@RequestBody @Valid User user) {
 		return ResponseEntity.ok(securityService.register(user));
 
 	}
 
+	@ApiOperation(value = "Login User")
 	@PostMapping("/login")
 	public ResponseEntity<UserDto> login(@RequestBody @Valid User user) {
 		boolean loginResponse = securityService.login(user.getEmail(), user.getPassword());

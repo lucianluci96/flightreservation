@@ -27,10 +27,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/users/registerUser","/users/login", "/reservations/**", "/flights",
-						"/flights/**", "/passengers/**", "/checkIn", "/checkIn/**","/users/**")
-				.permitAll().antMatchers("/reservations").hasAnyAuthority("ADMIN").anyRequest().authenticated()
-				.and().csrf().disable();
+				.antMatchers("/users/registerUser", "/users/login", "/reservations/**", "/flights", "/flights/**",
+						"/passengers/**", "/checkIn", "/checkIn/**", "/users/**", "/swagger-resources/**",
+						"/swagger-ui.html", "/v2/api-docs", "/webjars/**")
+				.permitAll().antMatchers("/reservations").hasAnyAuthority("ADMIN").anyRequest().authenticated().and()
+				.csrf().disable();
 
 	}
 }

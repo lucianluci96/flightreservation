@@ -26,8 +26,12 @@ import com.lucian.flightreservation.entities.Reservation;
 import com.lucian.flightreservation.repository.FlightRepository;
 import com.lucian.flightreservation.service.ReservationService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/reservations")
+@Api(value = "Reservation Management System", description = "Reservation Management System")
 public class ReservationControllerImpl {
 
 	@Autowired
@@ -36,12 +40,14 @@ public class ReservationControllerImpl {
 	@Autowired
 	ReservationService reservationService;
 
+	@ApiOperation(value = "View a list with available reservations")
 	@GetMapping
 	public ResponseEntity<List<ReservationDto>> getReservations() {
 		return ResponseEntity.ok(reservationService.getReservations());
 
 	}
 
+	@ApiOperation(value = "Get reservation by ID")
 	@GetMapping("/{id}")
 	public ResponseEntity<ReservationDto> getReservation(@PathVariable long id) {
 		Reservation reservation = reservationService.getReservation(id);
@@ -53,6 +59,7 @@ public class ReservationControllerImpl {
 		return new ResponseEntity<ReservationDto>(reservation.toDto(), HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "Delete reservation")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ReservationDto> deleteReservation(@PathVariable long id) {
 		Reservation reservation = reservationService.getReservation(id);
@@ -66,6 +73,7 @@ public class ReservationControllerImpl {
 
 	}
 
+	@ApiOperation(value = "Create reservation")
 	@PostMapping
 	public ResponseEntity<ReservationDto> completeReservation(@RequestBody @Valid ReservationRequest request) {
 		return ResponseEntity.ok(reservationService.bookFlight(request).toDto());
