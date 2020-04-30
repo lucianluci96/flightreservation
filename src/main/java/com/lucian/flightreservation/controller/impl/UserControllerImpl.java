@@ -106,7 +106,7 @@ public class UserControllerImpl {
 
 	@ApiOperation(value = "Login User")
 	@PostMapping("/login")
-	public ResponseEntity<UserDto> login(@RequestBody @Valid User user) {
+	public ResponseEntity<UserDto> login(@RequestBody User user) {
 		boolean loginResponse = securityService.login(user.getEmail(), user.getPassword());
 
 		if (loginResponse) {

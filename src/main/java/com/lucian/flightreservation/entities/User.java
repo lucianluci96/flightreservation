@@ -18,7 +18,7 @@ public class User extends AbstractEntity {
 	@NotNull(message = "First Name is required")
 	private String firstName;
 	
-	@NotNull(message = "First Name is required")
+	@NotNull(message = "Last Name is required")
 	private String lastName;
 	
 	@NotNull(message = "Email is required")
