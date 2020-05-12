@@ -1,9 +1,13 @@
 package com.lucian.flightreservation.dto;
 
+import javax.validation.constraints.Min;
+
 public class ReservationUpdateRequest {
 
 	private Long id;
 	private Boolean checkedIn;
+	
+	@Min(value=1,message = "Number of bags must be at least 1")
 	private int numberOfBags;
 
 	public Long getId() {
